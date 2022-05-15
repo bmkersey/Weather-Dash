@@ -9,6 +9,18 @@ var $fiveDayContainer = $("#five-day-cont");
 var $searchedCities = $("#searched-cities");
 
 
+// fectches geocode for a city and returns json from api with Lat and Lon
+var getGeocode = async function(url) {
+    try {
+        var gotGeocode = await fetch(url);
+        return await gotGeocode.json();
+    } catch (error) {
+        console.log(error)
+    }
+    
+}
+
+
 
 var longLat = async function(url) {
     var gotLatLon = await getGeocode(url)
