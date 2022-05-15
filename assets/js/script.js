@@ -9,7 +9,7 @@ var $fiveDayContainer = $("#five-day-cont");
 var $searchedCities = $("#searched-cities");
 
 
-// fectches geocode for a city and returns json from api with Lat and Lon
+// takes the city name and turns it into Lat/Long
 var getGeocode = async function(url) {
     try {
         var gotGeocode = await fetch(url);
@@ -34,7 +34,7 @@ var longLat = async function(url) {
     
 }
 
-// function to convert kelvin to farenheit
+// converts from K to F
 var kelToFar = function(kelvin) {
     var farenheit = Math.round((kelvin-273.15)*(9/5)+32)
     return farenheit;
@@ -46,7 +46,7 @@ var getWeather = async function(url) {
     return await gotWeather.json();
 }
 
-// creates all dynamic elements -- current weather/5day forecast/searched cities buttons
+//function that makes all the dynamic stuff appear on page
 var createWeather = async function(url) {
     var currentWeather = await getWeather(url);
 
@@ -76,34 +76,30 @@ var createWeather = async function(url) {
     var uvIndex = currentWeather.current.uvi;
 
 
-    // create and append a div to hold city/date/and icon to keep on one row
+    //create the current conditions div
     var $cityDateIcon = $('<div>').addClass("del d-flex").appendTo($currentConditions);
 
 
-    // city date icon
+    
     $('<div>')
         .text(cityText + " " + dateText)
         .addClass('del big-bold')
         .appendTo($cityDateIcon)
     $('<img src="./assets/images/' + icon + '" alt="' + altText + '" width="36" height="36">')
         .addClass('del')
-        .appendTo($cityDateIcon)
-    // temp
+        .appendTo($cityDateIcon)    
     $('<div>')
         .text("Temp: " + temp + "\u00B0 F")
         .addClass('del my-2')
-        .appendTo($currentConditions)
-    // wind
+        .appendTo($currentConditions)    
     $('<div>')
         .text("Wind: " + wind)
         .addClass('del mb-2')
-        .appendTo($currentConditions)
-    // humidity
+        .appendTo($currentConditions)    
     $('<div>')
         .text("Humidity: " + humidity)
         .addClass('del mb-2')
-        .appendTo($currentConditions)
-    // UV index
+        .appendTo($currentConditions)    
     $('<div>')
         .text("UV Index: ")
         .attr('id', 'UV')
@@ -114,7 +110,7 @@ var createWeather = async function(url) {
         .addClass('del')
         .appendTo($('#UV'))
 
-    // add color border for different UV levels
+    
     if (uvIndex <= 2) {
         $('span').addClass('low')
     }
@@ -125,9 +121,9 @@ var createWeather = async function(url) {
         $('span').addClass('severe')
     }
 
-    // loop to create 5-day forecast elements
+    // simple 5 day loop
     for (i = 1; i < 6; i++) {
-        // creates container for each day in the 5 day forecast
+        // 5 day forecase creation
         var $dailyContainer = $('<div>').attr('id', [i]).addClass("day del col border border-black text-light bg-dark").appendTo($fiveDayContainer)
         
         // local variables for 5day forecast
@@ -141,26 +137,23 @@ var createWeather = async function(url) {
         var wind = currentWeather.daily[i].wind_speed
         var humidity = currentWeather.daily[i].humidity
 
-        // date
+        
         $('<div>')
             .text(dateText)
             .addClass('del')
             .appendTo($dailyContainer)
-        // icon
+        
         $('<img src="./assets/images/' + icon + '" alt="' + altText + '" width="32" height="32">')
             .addClass('del')
-            .appendTo($dailyContainer)
-        // temp
+            .appendTo($dailyContainer)        
         $('<div>') 
             .text('Temp: ' + temp + "\u00B0 F")
             .addClass('del')
-            .appendTo($dailyContainer)
-        // wind
+            .appendTo($dailyContainer)        
         $('<div>') 
             .text('Wind: ' + wind + " MPH")
             .addClass('del')
-            .appendTo($dailyContainer)
-        // humidity
+            .appendTo($dailyContainer)        
         $('<div>') 
             .text('Humidity: ' + humidity + " %")
             .addClass('del')
@@ -181,7 +174,7 @@ var createWeather = async function(url) {
 
 
 
-
+//listener for click on search button to get weather
 $("#search-btn").click( async function(event){
     debugger;
     event.preventDefault();
@@ -195,4 +188,14 @@ $("#search-btn").click( async function(event){
     var weatherURl = await longLat(coordCall);
  
     createWeather(weatherURl);
+})
+
+
+// listener for clicks on saved cities
+$(document).on('click', '#city-button', async function() {
+    cityName = $(this).text()
+    $('.del').remove();
+    var coordinateCall = "https://api.openweathermap.org/geo/1.0/direct?q=" + cityName + "&limit=1&appid=1649c9000c0edd6212787cb652a2a6bb";
+    var weatherCallUrl = await getLatLon(coordinateCall);
+    createCurrent(weatherCallUrl);
 })
