@@ -14,14 +14,22 @@
         <h1 class="text-center">Weather Dashboard</h1>
     </header>
     <main class="container-fluid">
-        <div class="row">
-            <div class="col-lg-3">
+        <div class="row" id="sidebar">
+            <div class="col-lg-3" id="search-form">
                 <h2 class="text-start">Search for a City:</h2>
+                <input type="text" name="City" id="city-input">
+                <button class="btn btn-primary form city-form" type="submit" id="search-btn">Search</button>                
             </div>
+
             <div class="col-lg-9">
                 <div class="row">
-                    <div class="col-lg-12">
-                        Main area where cards populate
+                    <div class="col-lg-12" id="currentCond">
+                     
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12" id="five-day-cont">
+                        
                     </div>
 
                 </div>
