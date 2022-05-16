@@ -63,17 +63,19 @@ var createWeather = async function(url) {
     
     // local variables for current weather
     var cityText = parseCityName(cityName)
-    var cityClass = cityText.replace(/ /g,"-")
-    var unixTime = currentWeather.current.dt
-    var date = new Date(unixTime * 1000)
-    var dateText = date.toLocaleDateString("en-US")
-    var icon = currentWeather.current.weather[0].icon + ".png";
     var altText = currentWeather.current.weather[0].description;
     var tempKelvin = currentWeather.current.temp;
     var temp = kelToFar(tempKelvin)
     var wind = currentWeather.current.wind_speed + " MPH";
+    var cityClass = cityText.replace(/ /g,"-")
+    var unixTime = currentWeather.current.dt
     var humidity = currentWeather.current.humidity + " %"
     var uvIndex = currentWeather.current.uvi;
+    var date = new Date(unixTime * 1000)
+    var dateText = date.toLocaleDateString("en-US")
+    var icon = currentWeather.current.weather[0].icon + ".png";
+
+
 
 
     //create the current conditions div
@@ -124,7 +126,7 @@ var createWeather = async function(url) {
     // simple 5 day loop
     for (i = 1; i < 6; i++) {
         // 5 day forecase creation
-        var $dailyContainer = $('<div>').attr('id', [i]).addClass("day del col border border-black text-light bg-dark").appendTo($fiveDayContainer)
+        var $dailyContainer = $('<div>').attr('id', [i]).addClass("day del col").appendTo($fiveDayContainer)
         
         // local variables for 5day forecast
         var unixTime = currentWeather.daily[i].dt

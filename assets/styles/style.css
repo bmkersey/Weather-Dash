@@ -10,12 +10,13 @@ body {
 
 header {
     background: rgb(0,212,255);
-    background: linear-gradient(22deg, rgba(0,212,255,1) 0%, rgba(9,9,121,1) 41%, rgb(11, 6, 105) 87%);
+    background: linear-gradient(22deg, rgb(2, 199, 238) 0%, rgba(9,9,121,1) 41%, rgb(11, 6, 105) 87%);
     color: white;
 }
 
 .container {
     max-width: 100vw;
+    
 }
 
 .fill {
@@ -29,6 +30,8 @@ header {
 #five-day-cont {
     padding: 0 15px 8px 15px;  
     justify-content: space-between;
+    display: flex;
+    border: 1px solid black;
 }
 
 #currentCond {
@@ -68,3 +71,14 @@ span {
 #forecast{
     display:flex
 }
+
+#search-form {
+    width: 25%;
+    height: 100%;
+    margin: 5px 5px 5px 5px;
+}
+
+#currentCond {
+    display: flex;
+}
+
