@@ -1,3 +1,4 @@
+var savedCities = [];
 var cityLat = "";
 var cityLon = "";
 var cityName = "";
@@ -45,6 +46,35 @@ var getWeather = async function(url) {
     var gotWeather = await fetch(url);
     return await gotWeather.json();
 }
+
+
+var saveCities = function(cityText){
+    savedCities.push(cityText)
+    savedCities = JSON.stringify(savedCities)
+    localStorage.setItem(savedCities, cityText)
+}
+
+var loadCities = function(){
+    localStorage.getItem(savedCities)
+    if (savedCities.length === 0){
+        return;
+
+    }
+
+    savedCities = JSON.parse(savedCities)
+
+
+    for (var i = 0 ; i < savedCities.length;i++){
+        
+        $('<button type="button">')
+        .addClass("btn btn-secondary split mb-3 ")
+        .attr('id', "city-button")
+        .text(savedCities[i])
+        .appendTo($searchedCities)
+
+    }
+}
+
 
 //function that makes all the dynamic stuff appear on page
 var createWeather = async function(url) {
@@ -125,7 +155,7 @@ var createWeather = async function(url) {
 
     // simple 5 day loop
     for (i = 1; i < 6; i++) {
-        // 5 day forecase creation
+        // 5 day forecast creation
         var $dailyContainer = $('<div>').attr('id', [i]).addClass("day del col").appendTo($fiveDayContainer)
         
         // local variables for 5day forecast
@@ -169,11 +199,15 @@ var createWeather = async function(url) {
         .attr('id', "city-button")
         .text(cityText)
         .appendTo($searchedCities)
+        saveCities(cityClass,cityText);
     }    
 }
 
 
 
+
+
+loadCities();
 
 
 //listener for click on search button to get weather
@@ -185,7 +219,7 @@ $("#search-btn").click( async function(event){
 
     cityName = $("#city-input").val();
 
-    var coordCall = "http://api.openweathermap.org/geo/1.0/direct?q=" + cityName + "&limit=1&appid=d2a11f66066e53ea2af8c7518fbdcb18"
+    var coordCall = "https://api.openweathermap.org/geo/1.0/direct?q=" + cityName + "&limit=1&appid=d2a11f66066e53ea2af8c7518fbdcb18"
        
     var weatherURl = await longLat(coordCall);
  
@@ -198,6 +232,6 @@ $(document).on('click', '#city-button', async function() {
     cityName = $(this).text()
     $('.del').remove();
     var coordinateCall = "https://api.openweathermap.org/geo/1.0/direct?q=" + cityName + "&limit=1&appid=1649c9000c0edd6212787cb652a2a6bb";
-    var weatherCallUrl = await getLatLon(coordinateCall);
-    createCurrent(weatherCallUrl);
+    var weatherUrl = await longLat(coordinateCall);
+    createWeather(weatherUrl);
 })
